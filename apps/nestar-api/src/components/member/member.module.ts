@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
 import { MemberResolver } from './member.resolver';
 import { MemberService } from './member.service';
-import { Mutation } from '@nestjs/graphql';
+import { Mutation, Query } from '@nestjs/graphql';
+import { MongooseModule } from '@nestjs/mongoose';
+import MemberSchema from '../../schemas/Member.model';
 
 @Module({
+  imports: [
+    MongooseModule.forFeature([{name: "Member", schema: MemberSchema}]),
+  ],
   providers: [MemberResolver, MemberService]
 })
 export class MemberModule {
@@ -27,9 +32,9 @@ export class MemberModule {
     return this.memberService.updateMember();
   }
 
-  @Mutation(() => String)
+  @Query(() => String)
   public async getMember(): Promise<string>{
-    console.log("Mutation: getMember");
+    console.log("Query: getMember");
     return this.memberService.getMember();
   }
 }
