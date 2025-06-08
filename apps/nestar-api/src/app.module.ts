@@ -7,6 +7,7 @@ import { ApolloDriver } from "@nestjs/apollo"
 import { AppResolver } from './app.resolver';
 import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot(), 
@@ -16,7 +17,8 @@ import { DatabaseModule } from './database/database.module';
       uploads: false,
       autoSchemaFile: true
     }), 
-    ComponentsModule, DatabaseModule
+    ComponentsModule,
+    DatabaseModule,
 ],
   controllers: [AppController],
   providers: [AppService, AppResolver],
