@@ -29,13 +29,13 @@ export class Member{
   memberFullName?: string;
 
   @Field(() => String, { nullable: true})
-  memberImage: string;
+  memberImage?: string;
   
   @Field(() => String, { nullable: true})
-  memberAddress: string;
+  memberAddress?: string;
   
   @Field(() => String, { nullable: true})
-  memberDesc: string;
+  memberDesc?: string;
   
   @Field(() => Int)
   memberProperties: number;
