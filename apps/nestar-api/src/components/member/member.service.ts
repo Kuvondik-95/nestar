@@ -28,7 +28,7 @@ export class MemberService {
     const response: Member = await this.memberModel
     .findOne({ memberNick: memberNick })
     .select('+memberPassword')
-    .exec() as unknown as Member;
+    .exec();
 
     if(!response || response.memberStatus === MemberStatus.DELETE) {
       throw new InternalServerErrorException(Message.NO_MEMBER_NICK);
