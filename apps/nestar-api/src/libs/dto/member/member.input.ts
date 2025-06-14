@@ -12,7 +12,7 @@ export class MemberInput{
   @IsNotEmpty()
   @Length(5, 12)
   @Field(() => String)
-  memberPassword: String;
+  memberPassword: string;
   
   @IsNotEmpty()
   @Field(() => String)
@@ -38,5 +38,5 @@ export class LoginInput {
   @IsNotEmpty()
   @Length(5, 12)
   @Field(() => String)
-  memberPassword: String;
+  memberPassword: string;
 }
