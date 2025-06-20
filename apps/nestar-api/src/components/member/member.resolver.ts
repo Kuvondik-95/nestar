@@ -145,8 +145,8 @@ export class MemberResolver {
 @Mutation((returns) => [String])
 public async imagesUploader(
 	@Args('files', { type: () => [GraphQLUpload] })
-  files: Promise<FileUpload>[],
-  @Args('target') target: String,
+files: Promise<FileUpload>[],
+@Args('target') target: String,
 ): Promise<string[]> {
 	console.log('Mutation: imagesUploader');
 
@@ -178,5 +178,7 @@ public async imagesUploader(
 
 	await Promise.all(promisedList);
 	return uploadedImages;
+  // return ["This is not done!"];
 }
+
 }
