@@ -1,7 +1,7 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { PropertyService } from './property.service';
 import { Properties, Property } from '../../libs/dto/property/property';
-import { AgentPropertiesInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
+import { AgentPropertiesInquiry, AllPropertiesInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
 import { UseGuards } from '@nestjs/common';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { MemberType } from '../../libs/enums/member.enum';
@@ -75,4 +75,15 @@ export class PropertyResolver {
     return await this.propertyService.getAgentProperties(memberId, input);
   }
 
+  /** ADMIN **/
+  @Roles(MemberType.ADMIN)
+  @UseGuards(RolesGuard)
+  @Query(() => Properties)
+  public async getAllPropertiesByAdmin(
+    @Args('input') input: AllPropertiesInquiry,
+    @AuthMember('_id') memberId: ObjectId
+  ): Promise<Properties>{
+    console.log('Mutation: getAllPropertiesByAdmin');
+    return await this.propertyService.getAllPropertiesByAdmin(input);
+  }
 }
