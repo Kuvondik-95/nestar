@@ -173,12 +173,12 @@ files: Promise<FileUpload>[],
 			uploadedImages[index] = url;
 		} catch (err) {
 			console.log('Error, file missing!');
+      throw new Error(err.message);
 		}
 	});
 
 	await Promise.all(promisedList);
 	return uploadedImages;
-  // return ["This is not done!"];
 }
 
 }
