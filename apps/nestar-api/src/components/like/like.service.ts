@@ -23,7 +23,7 @@ export class LikeService {
 
     if(exist){
       await this.likeModel.findOneAndDelete(search).exec();
-      modifier = -1
+      modifier = -1;
     }else{
       try{
         await this.likeModel.create(input);
