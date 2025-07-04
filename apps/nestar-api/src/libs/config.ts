@@ -31,23 +31,56 @@ export const shapeIntoMongoObjectId = (target: any) => {
   return typeof target === 'string' ? new ObjectId(target) : target
 };
 
-export const lookUpAuthMemberLiked = (memberId: T, targetRefId: string = "$_id") => {
+
+
+export const lookupAuthMemberLiked = (memberId: T, targetRefId: string = "$_id") => {
 	return {
 		$lookup: {
+			// 1-STEP
 			from: "likes",
-			let: {
-				localLikeRefId: targetRefId,
-				localMemberId: memberId,
-				localMyFavorite: true
+			
+
+			// 2-STEP $let bu yerda shu queryni ichida ishlatish uchun local variable lar yasash uchun ishlatilarkan?
+			let: { 
+				localLikeRefId: targetRefId,  // property ning id si
+				localMemberId: memberId, // Authenticated bo'lgan user id si
+				localMyFavorite: true // Favorite true 
 			},
+
+
+			// 3-STEP $pipeline bizga array qaytaradi
 			pipeline: [
+				
+				// 3.1 $match match ichida localField bilan Foreign field ichidaga field larni solishtirish amalani qo'llayapmiz. 
+				// Ya'ni likes collection ichidagi 
+				// 	- likeRefId bilan properties collection ichidagi localLikeRefId > targetRefId=$id => propertyId ni solishtiryapmiz 
+				// 	- memberId bilan properties collection ichidagi localMemberId=AuthMemberId ni solishtiryapmiz 
+
 				{
 					$match: {
 						$expr: {
-							$and: [ { $eq: ["$likeRefId", "$$localLikeRefId"] }, { $eq: ["$memberId", "$$localMemberId"] } ],
+							$and: [ 
+								{ $eq: ["$likeRefId", "$$localLikeRefId"] }, 
+								{ $eq: ["$memberId", "$$localMemberId"] } 
+							],
 						},
 					},
 				},
+
+				/** 
+				  {
+						"_id": "6860966c65c8075358018031",
+						"likeGroup" : "MEMBER",
+						"likeRefId" : "684e2903e316d12c362407b8",
+						"memberId"  : "684e2979e316d12c362407c6",
+						"createdAt" : "2025-06-29T01:27:08.482+00:00",
+						"updatedAt" : "2025-06-29T01:27:08.482+00:00"			 
+					}
+				**/
+
+
+
+				// 3.2 $project ichida biz likes dan kelayotgan Document ichida Datasetlar ni biz yasagan meLiked DTO ga moslayapmiz.
 				{
 					$project: {
 						_id: 0,
@@ -57,16 +90,23 @@ export const lookUpAuthMemberLiked = (memberId: T, targetRefId: string = "$_id")
 					},
 				},	
 			],
+
+
+			// 4-STEP
 			as: "meLiked",
 		},
 	};
 };
 
+
+
+
+
 interface LookUpAuthMemberFollowed {
 	followerId: T;
 	followingId: string;
 }
-export const lookUpAuthMemberFollowed = (input: LookUpAuthMemberFollowed) => {
+export const lookupAuthMemberFollowed = (input: LookUpAuthMemberFollowed) => {
 	const { followerId, followingId } = input;
 	return {
 		$lookup: {
