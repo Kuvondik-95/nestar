@@ -10,7 +10,7 @@ import { Model } from 'mongoose';
 export class BatchService {
   constructor(
     @InjectModel('Property') private readonly propertyModel: Model<Property>,
-    @InjectModel('Member') private readonly memberModel: Model<Property>
+    @InjectModel('Member') private readonly memberModel: Model<Member>
   ){}
 
 
@@ -51,7 +51,7 @@ export class BatchService {
         memberType: MemberType.AGENT,
         memberStatus: MemberStatus.ACTIVE,
         memberRank: 0,
-      });
+      }).exec();
 
     const promisedList = agents.map(async (ele: Member) => {
       const { _id, memberProperties, memberLikes, memberArticles, memberViews } = ele;
