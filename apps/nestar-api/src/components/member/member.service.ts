@@ -120,7 +120,8 @@ export class MemberService {
   }
 
   private async checkSubscription(followerId: ObjectId, followingId: ObjectId): Promise<MeFollowed[]>{
-    const result = this.followModel.findOne({followingId: followingId, followerId: followerId}).exec();
+    const result = await this.followModel.findOne({followingId: followingId, followerId: followerId}).exec();
+    console.log("checkSubResult:", result); 
     return result ? [{followerId: followerId, followingId: followingId, myFollowing: true}] : [];
   }
   
