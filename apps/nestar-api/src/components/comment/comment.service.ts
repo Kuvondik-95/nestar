@@ -75,7 +75,8 @@ export class CommentService {
       },
       input,
       { new: true },
-    );
+    ).exec();
+    
     if(!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
     return result;
   }
